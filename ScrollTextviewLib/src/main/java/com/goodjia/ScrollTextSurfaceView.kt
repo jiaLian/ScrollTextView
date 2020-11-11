@@ -19,6 +19,7 @@ class ScrollTextSurfaceView(context: Context?, attrs: AttributeSet?) : ScrollTex
 
     @JvmOverloads
     fun show(content: String? = null, speed: Int? = null, textSize: Int? = null, @ColorInt textColor: Int? = null, @ColorInt bgColor: Int? = null, letterSpacing: Float? = null, playTime: Int? = null, repeatTimes: Int? = null) {
+        setScrollForever(true)
         playTime?.let {
             setScrollTimePeriod(it)
         } ?: repeatTimes?.let {

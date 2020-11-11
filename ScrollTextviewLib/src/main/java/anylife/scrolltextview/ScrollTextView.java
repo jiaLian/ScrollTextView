@@ -170,7 +170,6 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
         stopScroll = false;
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new ScrollTextThread(), 100, 100, TimeUnit.MILLISECONDS);
-        scheduleScrollPeriod();
     }
 
     /**
@@ -320,7 +319,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
         scheduleScrollPeriod();
     }
 
-    private void scheduleScrollPeriod() {
+    public void scheduleScrollPeriod() {
         if (scrollPeriodScheduledFuture != null) {
             scrollPeriodScheduledFuture.cancel(true);
         }
