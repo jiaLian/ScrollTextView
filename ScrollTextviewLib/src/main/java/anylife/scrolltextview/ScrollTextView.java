@@ -60,7 +60,8 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
     private boolean clickEnable = false;    // click to stop/start
     public boolean isHorizontal = true;     // horizontal｜V
     @IntRange(from = MIN_SPEED, to = MAX_SPEED)
-    private int speed = 3;                  // scroll-speed
+    private int speedDp = 3;                  // scroll-speed
+    private int speedPx = dip2px(getContext(), speedDp);                  // scroll-speed
     private String text = "";               // scroll text
     private float letterSpacing = 0.2f;
     private float textPadding = dip2px(getContext(), 5);
@@ -109,7 +110,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.ScrollTextView);
         clickEnable = arr.getBoolean(R.styleable.ScrollTextView_clickEnable, clickEnable);
         isHorizontal = arr.getBoolean(R.styleable.ScrollTextView_isHorizontal, isHorizontal);
-        speed = arr.getInteger(R.styleable.ScrollTextView_speed, speed);
+        setSpeedDp(arr.getInteger(R.styleable.ScrollTextView_speed, speedDp));
         text = arr.getString(R.styleable.ScrollTextView_text);
         textColor = arr.getColor(R.styleable.ScrollTextView_text_color, Color.BLACK);
         textSize = arr.getDimension(R.styleable.ScrollTextView_text_size, textSize);
@@ -155,7 +156,8 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
      * @param arg3 arg1
      */
     @Override
-    public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) { }
+    public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
+    }
 
     /**
      * surfaceCreated,init a new scroll thread.
@@ -245,8 +247,8 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
      *
      * @return speed
      */
-    public int getSpeed() {
-        return speed;
+    public int getSpeedDp() {
+        return speedDp;
     }
 
     /**
@@ -430,10 +432,11 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
     /**
      * set scroll speed
      *
-     * @param speed SCROLL SPEED
+     * @param speedDp SCROLL SPEED
      */
-    public void setSpeed(@IntRange(from = MIN_SPEED, to = MAX_SPEED) int speed) {
-        this.speed = speed;
+    public void setSpeedDp(@IntRange(from = MIN_SPEED, to = MAX_SPEED) int speedDp) {
+        this.speedDp = speedDp;
+        speedPx = dip2px(getContext(), speedDp);
     }
 
 
@@ -499,7 +502,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
                         return;
                     }
                     try {
-                        Thread.sleep(speed * 1000);
+                        Thread.sleep(speedDp * 1000);
                     } catch (InterruptedException e) {
                         Log.e(TAG, e.toString());
                     }
@@ -563,7 +566,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
                         continue;
                     }
                     draw(viewWidth - textX, textY);
-                    textX += speed;
+                    textX += speedPx;
                     if (textX > viewWidth_plus_textLength) {
                         textX = 0;
                         --needScrollTimes;

@@ -14,7 +14,6 @@ import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.anylife.fragment.scrolltextview.SettingActivity
 import com.larswerkman.holocolorpicker.ColorPicker
 import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -32,7 +31,7 @@ class SettingActivity : AppCompatActivity() {
         hideBottomUIMenu()
         setContentView(R.layout.activity_setting)
         scrollTextView.textSize = intent.getFloatExtra(LauncherActivity.SCROLL_SIZE_KEY, scrollSize)
-        scrollTextView.speed = intent.getIntExtra(LauncherActivity.SCROLL_SPEED_KEY, scrollSpeed)
+        scrollTextView.speedDp = intent.getIntExtra(LauncherActivity.SCROLL_SPEED_KEY, scrollSpeed)
         scrollTextView.textColor = intent.getIntExtra(LauncherActivity.TEXT_COLOR_KEY, 0)
         scrollTextView.setScrollTextBackgroundColor(intent.getIntExtra(LauncherActivity.TEXT_BG_COLOR_KEY, 0))
         if (!TextUtils.isEmpty(intent.getStringExtra(LauncherActivity.TEXT_INPUT_KEY))) {
@@ -64,10 +63,10 @@ class SettingActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
         val textSpeedSeekBar = findViewById<SeekBar>(R.id.text_speed_seek_bar)
-        textSpeedSeekBar.progress = scrollTextView.getSpeed()
+        textSpeedSeekBar.progress = scrollTextView.getSpeedDp()
         textSpeedSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                scrollTextView.speed = progress
+                scrollTextView.speedDp = progress
                 scrollSpeed = progress
                 Log.d(TAG, "onProgressChanged: speed $progress")
             }

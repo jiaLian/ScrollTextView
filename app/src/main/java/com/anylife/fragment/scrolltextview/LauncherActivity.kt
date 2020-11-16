@@ -66,7 +66,7 @@ class LauncherActivity : AppCompatActivity() {
             val intent = Intent(this@LauncherActivity, SettingActivity::class.java)
             intent.putExtra(TEXT_INPUT_KEY, scrollTextView.text)
             intent.putExtra(SCROLL_SIZE_KEY, scrollTextView.textSize)
-            intent.putExtra(SCROLL_SPEED_KEY, scrollTextView.speed)
+            intent.putExtra(SCROLL_SPEED_KEY, scrollTextView.speedDp)
             intent.putExtra(TEXT_COLOR_KEY, scrollTextView.textColor)
             intent.putExtra(TEXT_BG_COLOR_KEY, scrollTextView.backgroundColor)
             startActivityForResult(intent, REQUEST_SETTING_CODE)
@@ -86,7 +86,7 @@ class LauncherActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putString(TEXT_INPUT_KEY, scrollTextView.text)
         outState.putFloat(SCROLL_SIZE_KEY, scrollTextView.textSize)
-        outState.putInt(SCROLL_SPEED_KEY, scrollTextView.speed)
+        outState.putInt(SCROLL_SPEED_KEY, scrollTextView.speedDp)
         outState.putInt(TEXT_COLOR_KEY, scrollTextView.textColor)
         outState.putInt(TEXT_BG_COLOR_KEY, scrollTextView.backgroundColor)
     }
@@ -95,7 +95,7 @@ class LauncherActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         scrollTextView.text = savedInstanceState.getString(TEXT_INPUT_KEY)
         scrollTextView.textSize = savedInstanceState.getFloat(SCROLL_SIZE_KEY)
-        scrollTextView.speed = savedInstanceState.getInt(SCROLL_SPEED_KEY)
+        scrollTextView.speedDp = savedInstanceState.getInt(SCROLL_SPEED_KEY)
         scrollTextView.textColor = savedInstanceState.getInt(TEXT_COLOR_KEY)
         scrollTextView.backgroundColor = savedInstanceState.getInt(TEXT_BG_COLOR_KEY)
     }
@@ -106,7 +106,7 @@ class LauncherActivity : AppCompatActivity() {
             data ?: return
             val scrollSpeed = data.getIntExtra(SCROLL_SPEED_KEY, 0)
             if (0 != scrollSpeed) {
-                scrollTextView.speed = scrollSpeed
+                scrollTextView.speedDp = scrollSpeed
             }
             val scrollSize = data.getFloatExtra(SCROLL_SIZE_KEY, 0f)
             if (0f != scrollSize) {

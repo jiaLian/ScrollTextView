@@ -25,7 +25,7 @@ class ScrollTextSurfaceView(context: Context?, attrs: AttributeSet?) : ScrollTex
         } ?: repeatTimes?.let {
             setTimes(if (it > 0) it else Int.MAX_VALUE)
         } ?: resetParam()
-        speed?.let { this.speed = it }
+        speed?.let { this.speedDp = it }
         bgColor?.let { setScrollTextBackgroundColor(it) }
         textColor?.let { setTextColor(it) }
         textSize?.let { setTextSize(it.toFloat()) }
