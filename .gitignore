@@ -15,6 +15,7 @@ gen/
 *.log
 .navigation/
 *~
-gradle
 .cxx
 *release
+gradle/*
+!gradle/wrapper

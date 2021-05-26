@@ -1,9 +1,16 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.novoda.bintray-release'
-def verCode = 16
-def verName = "2.1.0"
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'maven-publish'
+
+def verCode = 17
+def verName = "2.1.1"
+def jfrogUrl = 'https://goodjia.jfrog.io/artifactory'
+def repKey = 'goodjia'
+def group = 'com.goodjia'
+def artif = 'scrollTextSurfaceView'
+
 android {
     compileSdkVersion 30
 
@@ -34,15 +41,78 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.core:core-ktx:1.3.2"
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation "androidx.core:core-ktx:1.5.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
-publish {
-    userOrg = 'jialian'           //bintray注册的用户名
-    repoName = 'goodJia'           //bintray仓库名
-    groupId = 'com.goodjia'
-    artifactId = 'scrollTextSurfaceView'
-    publishVersion = verName
-    desc = 'This is a scroll text view library'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId = group
+            artifactId = artif
+            version = verName
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            pom.withXml {
+                final dependenciesNode = asNode().appendNode('dependencies')
+                ext.addDependency = { Dependency dep, String scope ->
+                    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                        return // ignore invalid dependencies
+                    final dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dep.group)
+                    dependencyNode.appendNode('artifactId', dep.name)
+                    dependencyNode.appendNode('version', dep.version)
+                    dependencyNode.appendNode('scope', scope)
+                    if (!dep.transitive) {
+                        // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+                        final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                        exclusionNode.appendNode('groupId', '*')
+                        exclusionNode.appendNode('artifactId', '*')
+                    } else if (!dep.properties.excludeRules.empty) {
+                        // Otherwise add specified exclude rules
+                        final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                        dep.properties.excludeRules.each { ExcludeRule rule ->
+                            exclusionNode.appendNode('groupId', rule.group ?: '*')
+                            exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                        }
+                    }
+                }
+                // List all "compile" dependencies (for old Gradle)
+                configurations.compile.getDependencies().each { dep -> addDependency(dep, "compile") }
+                // List all "api" dependencies (for new Gradle) as "compile" dependencies
+                configurations.api.getDependencies().each { dep -> addDependency(dep, "compile") }
+                // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+                configurations.implementation.getDependencies().each { dep -> addDependency(dep, "runtime") }
+            }
+        }
+    }
+}
+
+artifactoryPublish {
+    publications(publishing.publications.aar)
+}
+
+artifactoryPublish.dependsOn('assembleRelease')
+artifactory {
+
+    contextUrl = jfrogUrl
+
+    publish {
+        repository {
+            repoKey = repKey // The Artifactory repository key to publish to
+            username = properties.getProperty('jfrog.user') // The publisher user name
+            password = properties.getProperty('jfrog.pwdkey') // The publisher password
+
+        }
+        defaults {
+            publications('aar')
+            publishArtifacts = true
+            // Properties to be attached to the published artifacts.
+            properties = ['qa.level': 'basic', 'dev.team': 'core']
+            publishPom = true // Publish generated POM files to Artifactory (true by default)
+        }
+    }
 }
