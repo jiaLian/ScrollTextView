@@ -1,13 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'maven-publish'
 
 def verCode = 17
 def verName = "2.1.1"
-def jfrogUrl = 'https://goodjia.jfrog.io/artifactory'
-def repKey = 'goodjia'
 def group = 'com.goodjia'
 def artif = 'scrollTextSurfaceView'
 
@@ -48,7 +45,6 @@ dependencies {
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
 publishing {
     publications {
         aar(MavenPublication) {
@@ -89,30 +85,14 @@ publishing {
             }
         }
     }
-}
 
-artifactoryPublish {
-    publications(publishing.publications.aar)
-}
-
-artifactoryPublish.dependsOn('assembleRelease')
-artifactory {
-
-    contextUrl = jfrogUrl
-
-    publish {
-        repository {
-            repoKey = repKey // The Artifactory repository key to publish to
-            username = properties.getProperty('jfrog.user') // The publisher user name
-            password = properties.getProperty('jfrog.pwdkey') // The publisher password
-
-        }
-        defaults {
-            publications('aar')
-            publishArtifacts = true
-            // Properties to be attached to the published artifacts.
-            properties = ['qa.level': 'basic', 'dev.team': 'core']
-            publishPom = true // Publish generated POM files to Artifactory (true by default)
+    repositories {
+        maven {
+            url properties.getProperty('azure.url')
+            credentials {
+                username properties.getProperty('azure.feed')
+                password properties.getProperty('azure.token')
+            }
         }
     }
 }
