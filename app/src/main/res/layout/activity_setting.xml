@@ -18,8 +18,8 @@
         app:layout_constraintTop_toBottomOf="@+id/btnClose"
         app:speed="4"
         app:text="@string/text"
-        app:text_color="@android:color/white"
-        app:text_size="22sp" />
+        app:textColor="@android:color/white"
+        app:textSize="22sp" />
 
     <Button
         android:id="@+id/btnClose"

@@ -108,21 +108,22 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
         surfaceHolder = this.getHolder();  //get The surface holder
         surfaceHolder.addCallback(this);
         paint = new Paint();
-        paint.setTextScaleX(textScaleX);
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.ScrollTextView);
         clickEnable = arr.getBoolean(R.styleable.ScrollTextView_clickEnable, clickEnable);
         isHorizontal = arr.getBoolean(R.styleable.ScrollTextView_isHorizontal, isHorizontal);
         setSpeedDp(arr.getInteger(R.styleable.ScrollTextView_speed, speedDp));
         text = arr.getString(R.styleable.ScrollTextView_text);
-        textColor = arr.getColor(R.styleable.ScrollTextView_text_color, Color.BLACK);
-        textSize = arr.getDimension(R.styleable.ScrollTextView_text_size, textSize);
+        textColor = arr.getColor(R.styleable.ScrollTextView_textColor, Color.BLACK);
+        textSize = arr.getDimension(R.styleable.ScrollTextView_textSize, textSize);
         needScrollTimes = arr.getInteger(R.styleable.ScrollTextView_times, Integer.MAX_VALUE);
         letterSpacing = arr.getFloat(R.styleable.ScrollTextView_letterSpacing, letterSpacing);
+        textScaleX = arr.getFloat(R.styleable.ScrollTextView_textScaleX, textScaleX);
         textPadding = arr.getDimension(R.styleable.ScrollTextView_textPadding, textPadding);
         isScrollForever = arr.getBoolean(R.styleable.ScrollTextView_isScrollForever, true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             paint.setLetterSpacing(letterSpacing);
         }
+        paint.setTextScaleX(textScaleX);
         paint.setColor(textColor);
         paint.setTextSize(textSize);
 

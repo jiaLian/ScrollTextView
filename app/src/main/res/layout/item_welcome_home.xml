@@ -34,8 +34,8 @@
             customAttr:isHorizontal="true"
             customAttr:speed="2"
             customAttr:text="It is default text"
-            customAttr:text_color="#ffffffff"
-            customAttr:text_size="16sp" />
+            customAttr:textColor="#ffffffff"
+            customAttr:textSize="16sp" />
 
         <TextView
             android:id="@+id/item_title"
