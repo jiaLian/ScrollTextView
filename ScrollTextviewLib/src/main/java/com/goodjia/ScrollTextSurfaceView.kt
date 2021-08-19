@@ -6,7 +6,8 @@ import android.view.View
 import androidx.annotation.ColorInt
 import anylife.scrolltextview.ScrollTextView
 
-class ScrollTextSurfaceView(context: Context?, attrs: AttributeSet?) : ScrollTextView(context, attrs), ScrollListener {
+class ScrollTextSurfaceView(context: Context?, attrs: AttributeSet?) :
+    ScrollTextView(context, attrs), ScrollListener {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         addScrollListener(this)
@@ -18,13 +19,24 @@ class ScrollTextSurfaceView(context: Context?, attrs: AttributeSet?) : ScrollTex
     }
 
     @JvmOverloads
-    fun show(content: String? = null, speed: Int? = null, textSize: Int? = null, @ColorInt textColor: Int? = null, @ColorInt bgColor: Int? = null, letterSpacing: Float? = null, playTime: Int? = null, repeatTimes: Int? = null) {
+    fun show(
+        content: String? = null,
+        speed: Int? = null,
+        textSize: Int? = null,
+        @ColorInt textColor: Int? = null,
+        @ColorInt bgColor: Int? = null,
+        letterSpacing: Float? = null,
+        playTime: Int? = null,
+        repeatTimes: Int? = null,
+        textScaleX: Float? = null
+    ) {
         setScrollForever(true)
         playTime?.let {
             setScrollTimePeriod(it)
         } ?: repeatTimes?.let {
             setTimes(if (it > 0) it else Int.MAX_VALUE)
         } ?: resetParam()
+        textScaleX?.let { this.textScaleX = it }
         speed?.let { this.speedDp = it }
         bgColor?.let { setScrollTextBackgroundColor(it) }
         textColor?.let { setTextColor(it) }

@@ -53,6 +53,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
     private SurfaceHolder surfaceHolder;   //providing access and control over this SurfaceView's underlying surface.
 
     private Paint paint = null;
+    private float textScaleX = 1f;
     private boolean stopScroll = false;     // stop scroll
     private boolean pauseScroll = false;    // pause scroll
 
@@ -107,6 +108,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
         surfaceHolder = this.getHolder();  //get The surface holder
         surfaceHolder.addCallback(this);
         paint = new Paint();
+        paint.setTextScaleX(textScaleX);
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.ScrollTextView);
         clickEnable = arr.getBoolean(R.styleable.ScrollTextView_clickEnable, clickEnable);
         isHorizontal = arr.getBoolean(R.styleable.ScrollTextView_isHorizontal, isHorizontal);
@@ -205,6 +207,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
      */
     private int getFontHeight(float fontSize) {
         Paint paint = new Paint();
+        paint.setTextScaleX(textScaleX);
         paint.setTextSize(fontSize);
         FontMetrics fm = paint.getFontMetrics();
         return (int) (Math.ceil(fm.descent - fm.ascent) + textPadding * 2);
@@ -292,6 +295,15 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
         }
     }
 
+    public float getTextScaleX() {
+        return textScaleX;
+    }
+
+    public void setTextScaleX(float textScaleX) {
+        this.textScaleX = textScaleX;
+        paint.setTextScaleX(textScaleX);
+    }
+
     /**
      * set scroll times
      *
@@ -353,7 +365,7 @@ public class ScrollTextView extends SurfaceView implements SurfaceHolder.Callbac
         textSize = sp2px(getContext(), textSizeSp);
         //重新设置Size
         paint.setTextSize(textSize);
-
+        paint.setTextScaleX(textScaleX);
         //实际的视图高,thanks to WG
         viewHeight = getFontHeight(textSize);
         android.view.ViewGroup.LayoutParams lp = this.getLayoutParams();

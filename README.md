@@ -1,4 +1,4 @@
-[![Download](https://api.bintray.com/packages/jialian/goodJia/scrollTextSurfaceView/images/download.svg) ](https://bintray.com/jialian/goodJia/scrollTextSurfaceView/_latestVersion)
+[![com.goodjia:scrollTextSurfaceView package in gj feed in Azure Artifacts](https://feeds.dev.azure.com/goodjialian/db3d441d-f9cb-441e-9edc-acab8f7bb4fa/_apis/public/Packaging/Feeds/911ee5c1-df21-4a56-a486-b41525ee9d42/Packages/b7ffb7f7-0aac-4521-a26c-9451e3e53c09/Badge)](https://dev.azure.com/goodjialian/lib/_packaging?_a=package&feed=911ee5c1-df21-4a56-a486-b41525ee9d42&package=b7ffb7f7-0aac-4521-a26c-9451e3e53c09&preferRelease=true)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 # Scroll Text View
